@@ -39,7 +39,7 @@ export async function createRoleAction(formData: FormData) {
   if (existing) redirectError("Bu isimde bir rol zaten var.", "yeni");
 
   await prisma.appRole.create({
-    data: { name, description: description || null, color, ...parsed },
+    data: { ...parsed, description: description || null },
   });
 
   revalidatePath("/admin/roles");

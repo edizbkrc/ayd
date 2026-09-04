@@ -242,7 +242,7 @@ export default function NotificationCenter({ userId }: { userId: string }) {
                   type="button"
                   onClick={() => {
                     setHistory([]);
-                    saveHistory([]);
+                    saveHistory(userId, []);
                   }}
                   className="text-xs text-muted hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
                 >
