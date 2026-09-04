@@ -17,8 +17,6 @@ Kasıtlı olarak sade tutuldu: sürükle-bırak kütüphanesi, gerçek zamanlı 
 
 ## Kurulum
 
-> Not: Bu proje bu ortamda `npm install` çalıştırılamadığı için (ağ erişimi kısıtlı) test edilememiştir — kendi bilgisayarınızda aşağıdaki adımları izleyin.
-
 ```bash
 cd trelloapp
 npm install
