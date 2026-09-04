@@ -1,0 +1,246 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Tema değişkenleri (varsayılan: Lacivert / Navy — soft) ─── */
+:root {
+  --brand-50:   #f2f5fb;
+  --brand-100:  #dde5f4;
+  --brand-200:  #bccae8;
+  --brand-300:  #90a8d4;
+  --brand-400:  #6685bc;
+  --brand-500:  #4466a3;
+  --brand-600:  #2f508a;
+  --brand-700:  #1e3870;
+  --brand-800:  #142554;
+  --brand-900:  #0e193c;
+  --brand-950:  #090f24;
+
+  --nav-bg:     rgba(22, 37, 84, 0.94);
+  --nav-border: rgba(46, 80, 138, 0.35);
+
+  --page-bg:    #f5f7fc;
+  --page-grad1: rgba(70, 102, 163, 0.06);
+  --page-grad2: rgba(30, 56, 112, 0.03);
+
+  --page-bg-dark:    #111827;
+  --page-grad1-dark: rgba(30, 56, 112, 0.25);
+  --page-grad2-dark: rgba(70, 102, 163, 0.12);
+
+  --card-bg:         rgba(255,255,255,0.92);
+  --card-ring:       rgba(210,218,232,0.8);
+  --card-bg-dark:    rgba(24,32,52,0.82);
+  --card-ring-dark:  rgba(46,64,100,0.5);
+
+  --btn-shadow: rgba(30, 56, 112, 0.28);
+}
+
+html {
+  @apply scroll-smooth;
+}
+
+body {
+  @apply text-slate-900 dark:text-slate-100 antialiased;
+  background-color: var(--page-bg);
+  background-image:
+    radial-gradient(1200px 520px at -8% -12%, var(--page-grad1), transparent 55%),
+    radial-gradient(900px 420px at 108% -8%,  var(--page-grad2), transparent 50%);
+}
+
+.dark body {
+  background-color: var(--page-bg-dark);
+  background-image:
+    radial-gradient(1100px 500px at -10% -14%, var(--page-grad1-dark), transparent 55%),
+    radial-gradient(800px 400px at 110% -6%,  var(--page-grad2-dark), transparent 48%);
+}
+
+::selection {
+  @apply bg-brand-200 text-brand-900;
+}
+
+.dark ::selection {
+  @apply bg-brand-700 text-white;
+}
+
+@layer components {
+/* Buttons */
+
+.btn {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-brand-700 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-brand-600 active:bg-brand-800 transition-all disabled:opacity-50 disabled:pointer-events-none;
+  box-shadow: 0 8px 24px -8px var(--btn-shadow, rgba(18,38,96,0.4));
+}
+
+.btn-sm {
+  @apply px-2.5 py-1.5 text-xs rounded-lg shadow-none;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-white/80 px-3.5 py-2.5 text-sm font-semibold text-slate-700 ring-1 ring-inset ring-slate-200/80 shadow-sm hover:bg-white hover:ring-slate-300 active:bg-slate-50 transition-all dark:bg-slate-800/80 dark:text-slate-200 dark:ring-slate-700 dark:hover:bg-slate-800;
+}
+
+.btn-ghost {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium text-slate-600 hover:bg-white/70 hover:text-slate-900 active:bg-white transition-colors dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white;
+}
+
+.btn-danger {
+  @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-red-50 px-3.5 py-2 text-sm font-semibold text-red-600 ring-1 ring-inset ring-red-200/80 hover:bg-red-100 transition-colors dark:bg-red-950/60 dark:text-red-400 dark:ring-red-900 dark:hover:bg-red-900/50;
+}
+
+.icon-btn {
+  @apply inline-flex items-center justify-center h-8 w-8 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors dark:text-slate-500 dark:hover:text-slate-200 dark:hover:bg-slate-800;
+}
+
+.icon-btn-danger {
+  @apply hover:!text-red-600 hover:!bg-red-50 dark:hover:!text-red-400 dark:hover:!bg-red-950;
+}
+
+/* Form controls */
+
+.input {
+  @apply w-full rounded-xl border border-slate-200/90 bg-white/90 px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-slate-400/30 focus:border-slate-500 dark:bg-slate-900/80 dark:border-slate-700 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:ring-slate-600/40 dark:focus:border-slate-500;
+}
+
+.select {
+  @apply input appearance-none bg-no-repeat pr-8;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2394a3b8'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-position: right 0.5rem center;
+  background-size: 1.25em;
+}
+
+.label {
+  @apply block text-[11px] font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400 mb-1.5;
+}
+
+/* Surfaces */
+
+.card-surface {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 1rem;
+  background-color: var(--card-bg, rgba(255,255,255,0.88));
+  box-shadow: 0 1px 2px rgba(15,23,42,0.04), 0 8px 24px -8px rgba(15,23,42,0.08);
+  ring-color: transparent;
+  outline: 1px solid var(--card-ring, rgba(203,213,225,0.7));
+}
+.dark .card-surface {
+  background-color: var(--card-bg-dark, rgba(15,23,42,0.82));
+  outline: 1px solid var(--card-ring-dark, rgba(51,65,85,0.8));
+}
+
+.surface-muted {
+  @apply bg-white/55 backdrop-blur-sm rounded-2xl ring-1 ring-slate-200/60 dark:bg-slate-900/55 dark:ring-slate-800;
+}
+
+.glass-nav {
+  background-color: var(--nav-bg, rgba(11, 24, 69, 0.96));
+  border-bottom: 1px solid var(--nav-border, rgba(30, 58, 122, 0.4));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Text helpers */
+
+.text-muted {
+  @apply text-slate-500 dark:text-slate-400;
+}
+
+.text-faint {
+  @apply text-slate-400 dark:text-slate-500;
+}
+
+.link-hover {
+  @apply hover:text-brand-600 dark:hover:text-brand-400 transition-colors;
+}
+
+.page-title {
+  @apply text-2xl font-bold tracking-tight text-slate-900 dark:text-white;
+}
+
+.page-subtitle {
+  @apply text-sm text-muted mt-1.5 leading-relaxed;
+}
+
+.section-label {
+  @apply text-[11px] font-semibold uppercase tracking-wider text-faint;
+}
+
+/* Badges */
+
+.badge {
+  @apply inline-flex items-center text-[11px] font-semibold bg-slate-100/90 text-slate-600 px-2 py-0.5 rounded-full dark:bg-slate-800 dark:text-slate-300;
+}
+
+.badge-brand {
+  @apply inline-flex items-center text-[11px] font-semibold px-2 py-0.5 rounded-full;
+  background-color: var(--brand-50);
+  color: var(--brand-700);
+}
+.dark .badge-brand {
+  background-color: var(--brand-800);
+  color: var(--brand-200);
+}
+
+.badge-outline {
+  @apply inline-flex items-center text-[11px] font-semibold text-slate-500 ring-1 ring-inset ring-slate-300 px-2 py-0.5 rounded-full dark:text-slate-400 dark:ring-slate-700;
+}
+
+/* Avatars */
+
+.avatar {
+  @apply inline-flex items-center justify-center shrink-0 rounded-full font-bold;
+  height: 2rem;
+  width: 2rem;
+  font-size: 0.7rem;
+}
+
+.avatar-sm {
+  height: 1.5rem;
+  width: 1.5rem;
+  font-size: 0.58rem;
+}
+
+.avatar-lg {
+  height: 2.75rem;
+  width: 2.75rem;
+  font-size: 0.85rem;
+}
+
+/* Feedback */
+
+.error-box {
+  @apply mb-4 flex items-start gap-2 rounded-xl bg-red-50 ring-1 ring-inset ring-red-200 px-3.5 py-2.5 text-sm text-red-700 dark:bg-red-950/70 dark:ring-red-900 dark:text-red-400;
+}
+
+.empty-state {
+  @apply flex flex-col items-center justify-center text-center py-12 px-4 text-faint;
+}
+
+/* Kanban */
+
+.kanban-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(203 213 225 / 0.9) transparent;
+}
+
+.dark .kanban-scroll {
+  scrollbar-color: rgb(51 65 85) transparent;
+}
+
+.kanban-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+
+.kanban-scroll::-webkit-scrollbar-thumb {
+  background: rgb(203 213 225);
+  border-radius: 999px;
+}
+
+.dark .kanban-scroll::-webkit-scrollbar-thumb {
+  background: rgb(51 65 85);
+}
+}
+
+@keyframes shrink-progress {
+  from { width: 100%; }
+  to   { width: 0%; }
+}

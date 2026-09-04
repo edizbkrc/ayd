@@ -1,0 +1,164 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Pano (board) bazında rol.
+enum BoardRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+enum CardStatus {
+  TODO
+  IN_PROGRESS
+  REVIEW
+  DONE
+  CANCELLED
+}
+
+// Site genelinde yönetici tarafından oluşturulan roller.
+model AppRole {
+  id             String   @id @default(cuid())
+  name           String   @unique
+  description    String?
+  color          String   @default("indigo")
+  isSystem       Boolean  @default(false)
+  isDefault      Boolean  @default(false)
+  canManageUsers    Boolean  @default(false)
+  canManageRoles    Boolean  @default(false)
+  canCreateProjects Boolean  @default(false)
+  canCreateTasks    Boolean  @default(true)
+  canViewAllTasks   Boolean  @default(false)
+  canManageMembers  Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  users          User[]
+}
+
+model User {
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  passwordHash  String
+  roleId        String
+  appRole       AppRole       @relation(fields: [roleId], references: [id])
+  createdAt     DateTime      @default(now())
+  ownedBoards   Board[]       @relation("BoardOwner")
+  boardMembers  BoardMember[]
+  assignedCards CardAssignee[]
+  comments      CardComment[]
+  activities    CardActivity[]
+  attachments   CardAttachment[]
+  settings      UserSettings?
+}
+
+model UserSettings {
+  id                    String  @id @default(cuid())
+  userId                String  @unique
+  user                  User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // E-posta bildirimleri
+  emailOnAssigned       Boolean @default(true)   // İş atandığında
+  emailOnApproved       Boolean @default(true)   // İş onaylandığında
+  emailOnRejected       Boolean @default(true)   // İş geri gönderildiğinde
+  emailOnReopened       Boolean @default(true)   // İş yeniden açıldığında
+  emailOnReview         Boolean @default(true)   // İş incelemeye gönderildiğinde (yönetici)
+  emailOnComment        Boolean @default(false)  // Yeni yorum yapıldığında
+}
+
+model Board {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime      @default(now())
+  ownerId     String
+  owner       User          @relation("BoardOwner", fields: [ownerId], references: [id])
+  members     BoardMember[]
+  lists       List[]
+}
+
+model BoardMember {
+  id      String    @id @default(cuid())
+  boardId String
+  userId  String
+  role    BoardRole @default(MEMBER)
+  board   Board     @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  user    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([boardId, userId])
+}
+
+model List {
+  id      String @id @default(cuid())
+  name    String
+  order   Int
+  boardId String
+  board   Board  @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  cards   Card[]
+}
+
+model Card {
+  id          String         @id @default(cuid())
+  title       String
+  description String?
+  order       Int
+  dueDate     DateTime?
+  createdAt   DateTime       @default(now())
+  status      CardStatus     @default(TODO)
+  listId      String
+  list        List           @relation(fields: [listId], references: [id], onDelete: Cascade)
+  assignees   CardAssignee[]
+  comments    CardComment[]
+  activities  CardActivity[]
+  attachments CardAttachment[]
+}
+
+model CardComment {
+  id        String   @id @default(cuid())
+  cardId    String
+  userId    String
+  body      String
+  createdAt DateTime @default(now())
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CardActivity {
+  id        String   @id @default(cuid())
+  cardId    String
+  userId    String
+  action    String
+  fromValue String?
+  toValue   String?
+  note      String?
+  createdAt DateTime @default(now())
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CardAttachment {
+  id        String   @id @default(cuid())
+  cardId    String
+  userId    String
+  fileName  String
+  fileUrl   String
+  fileSize  Int
+  mimeType  String
+  createdAt DateTime @default(now())
+  card      Card     @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model CardAssignee {
+  id     String @id @default(cuid())
+  cardId String
+  userId String
+  card   Card   @relation(fields: [cardId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([cardId, userId])
+}
